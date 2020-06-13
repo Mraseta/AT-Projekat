@@ -11,6 +11,10 @@ public class AgentCenter {
 		this.address = address;
 	}
 
+	public AgentCenter() {
+		// TODO Auto-generated constructor stub
+	}
+
 	public String getAlias() {
 		return alias;
 	}

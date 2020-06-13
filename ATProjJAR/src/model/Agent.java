@@ -9,6 +9,10 @@ public class Agent implements AgentInterface {
 		this.id = id;
 	}
 
+	public Agent() {
+		// TODO Auto-generated constructor stub
+	}
+
 	public AID getId() {
 		return id;
 	}
