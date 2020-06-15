@@ -142,6 +142,16 @@ public class AgentBean {
 		a.setId(new AID(name, ac, new AgentType(type, type)));
 		Data.getAgents().add(a);
 		
+		for(AgentCenter aa : Data.getAgentCenters()) {
+			if(!h.equals(aa.getAddress())) {
+				ResteasyClient rc = new ResteasyClientBuilder().build();			
+				String path = "http://" + aa.getAddress() + ":8080/ChatWAR/rest/agents/running";
+				System.out.println(path);
+				ResteasyWebTarget rwt = rc.target(path);
+				Response response = rwt.request(MediaType.APPLICATION_JSON).post(Entity.entity(Data.getAgents(), MediaType.APPLICATION_JSON));
+			}
+		}
+		
 		return Response.status(200).build();
 	}
 	

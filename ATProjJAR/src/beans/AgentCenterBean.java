@@ -71,6 +71,14 @@ public class AgentCenterBean {
 				System.out.println(a);
 				System.out.println("\n\n\n\n nema master");
 				this.master = this.hostip;
+				for(Agent ag : Data.getAgents()) {
+					System.out.println(ag);
+					if(ag.getId().getHost().getAddress().equals("temp")) {
+						ag.getId().setHost(n);
+					}
+					
+					System.out.println(ag);
+				}
 			} else {
 				this.master = fileContent.split("=")[1];
 				Data.getAgentCenters().add(new AgentCenter(this.master, this.master));

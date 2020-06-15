@@ -4,7 +4,11 @@ import java.util.ArrayList;
 
 import javax.ejb.Singleton;
 
+import agents.Collector;
+import agents.MasterAgent;
+import agents.Predictor;
 import model.ACLMessage;
+import model.AID;
 import model.Agent;
 import model.AgentCenter;
 import model.AgentType;
@@ -17,10 +21,30 @@ public class Data {
 	private static ArrayList<AgentType> agentClasses = new ArrayList<>();
 	private static ArrayList<ACLMessage> messages = new ArrayList<>();
 	
-	static {
-		agents.add(new Agent());
-		agents.add(new Agent());
-		agents.add(new Agent());
+	static {		
+		AgentType at1 = new AgentType("sakupljac", "sakupljac");
+		AgentType at2 = new AgentType("predikcija", "predikcija");
+		AgentType at3 = new AgentType("master", "master");
+		
+		agentClasses.add(at1);
+		agentClasses.add(at2);
+		agentClasses.add(at3);
+		
+		Collector agent1 = new Collector();
+		AID id1 = new AID("agent1", new AgentCenter("temp", "temp"), at1);
+		agent1.setId(id1);
+		
+		Predictor agent2 = new Predictor();
+		AID id2 = new AID("agent2", new AgentCenter("temp", "temp"), at2);
+		agent2.setId(id2);
+		
+		MasterAgent agent3 = new MasterAgent();
+		AID id3 = new AID("agent3", new AgentCenter("temp", "temp"), at3);
+		agent3.setId(id3);
+		
+		agents.add(agent1);
+		agents.add(agent2);
+		agents.add(agent3);
 	}
 
 	public static ArrayList<Agent> getAgents() {

@@ -30,6 +30,9 @@ public class AgentCenter {
 	public void setAddress(String address) {
 		this.address = address;
 	}
-	
-	
+
+	@Override
+	public String toString() {
+		return "AgentCenter [alias=" + alias + ", address=" + address + "]";
+	}
 }

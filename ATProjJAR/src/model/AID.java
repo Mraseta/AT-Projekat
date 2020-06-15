@@ -36,6 +36,11 @@ public class AID {
 	public void setType(AgentType type) {
 		this.type = type;
 	}
+
+	@Override
+	public String toString() {
+		return "AID [name=" + name + ", host=" + host + ", type=" + type + "]";
+	}
 	
 	
 }

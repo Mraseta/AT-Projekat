@@ -26,6 +26,9 @@ public class AgentType {
 	public void setModule(String module) {
 		this.module = module;
 	}
-	
-	
+
+	@Override
+	public String toString() {
+		return "AgentType [name=" + name + ", module=" + module + "]";
+	}
 }

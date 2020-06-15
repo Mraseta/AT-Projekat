@@ -27,4 +27,8 @@ public class Agent implements AgentInterface {
 		System.out.println("handleMessage Agent");
 	}
 
+	@Override
+	public String toString() {
+		return "Agent [id=" + id + "]";
+	}
 }
