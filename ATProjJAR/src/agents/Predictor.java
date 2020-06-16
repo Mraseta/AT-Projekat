@@ -78,7 +78,7 @@ public class Predictor extends Agent {
 				e.printStackTrace();
 			}
 			
-			String h = ip.toString().split("/")[1].split("\n")[0];
+			String h = Data.getMyAddress();
 			
 			for(Agent a : Data.getAgents()) {
 				if(a.getId().getHost().getAddress().equals(h) && a.getId().getType().getName().equals("master")) {

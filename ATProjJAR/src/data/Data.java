@@ -20,6 +20,7 @@ public class Data {
 	private static ArrayList<AgentCenter> agentCenters = new ArrayList<>();
 	private static ArrayList<AgentType> agentClasses = new ArrayList<>();
 	private static ArrayList<ACLMessage> messages = new ArrayList<>();
+	private static String myAddress = "";
 	
 	static {		
 		AgentType at1 = new AgentType("collector", "collector");
@@ -45,6 +46,8 @@ public class Data {
 		agents.add(agent1);
 		agents.add(agent2);
 		agents.add(agent3);
+		
+		myAddress = "192.168.0.12";
 	}
 
 	public static ArrayList<Agent> getAgents() {
@@ -78,6 +81,12 @@ public class Data {
 	public static void setAgentClasses(ArrayList<AgentType> agentClasses) {
 		Data.agentClasses = agentClasses;
 	}
-	
-	
+
+	public static String getMyAddress() {
+		return myAddress;
+	}
+
+	public static void setMyAddress(String myAddress) {
+		Data.myAddress = myAddress;
+	}
 }

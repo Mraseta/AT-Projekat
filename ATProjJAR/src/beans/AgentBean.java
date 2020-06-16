@@ -69,7 +69,7 @@ public class AgentBean {
 			reader = new BufferedReader(new InputStreamReader(in));
 			String fileContent = reader.readLine();
 			InetAddress ip = InetAddress.getLocalHost();
-			hostip = ip.toString().split("/")[1].split("\n")[0];
+			hostip = Data.getMyAddress();
 			master = fileContent.split("=")[1];
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -128,7 +128,7 @@ public class AgentBean {
 			e.printStackTrace();
 		}
 		
-		String h = ip.toString().split("/")[1].split("\n")[0];
+		String h = Data.getMyAddress();
 		
 		AgentCenter ac = new AgentCenter();
 		

@@ -50,7 +50,7 @@ public class MDBConsumer implements MessageListener {
 				e.printStackTrace();
 			}
 			
-			String h = ip.toString().split("/")[1].split("\n")[0];
+			String h = Data.getMyAddress();
 			
 			ArrayList<Agent> rec = new ArrayList<Agent>();
 			

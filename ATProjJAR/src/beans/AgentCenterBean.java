@@ -11,8 +11,10 @@ import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.io.Writer;
 import java.net.InetAddress;
+import java.net.NetworkInterface;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
+import java.util.Enumeration;
 import java.util.List;
 import java.util.Random;
 
@@ -99,7 +101,7 @@ public class AgentCenterBean {
 			String fileContent = reader.readLine();
 			System.out.println("FC " + fileContent);
 			InetAddress ip = InetAddress.getLocalHost();
-			this.hostip = ip.toString().split("/")[1].split("\n")[0];
+			this.hostip = Data.getMyAddress();
 			
 			AgentCenter n = new AgentCenter(this.hostip, this.hostip);
 			Data.getAgentCenters().add(n);
@@ -134,19 +136,19 @@ public class AgentCenterBean {
 				this.master = fileContent.split("=")[1];
 				Data.getAgentCenters().add(new AgentCenter(this.master, this.master));
 				ResteasyClient rc = new ResteasyClientBuilder().build();			
-				String path = "http://" + this.master + ":8080/ChatWAR/rest/node";
+				String path = "http://" + this.master + ":8080/ATProjWAR/rest/node";
 				System.out.println(path);
 				ResteasyWebTarget rwt = rc.target(path);
 				Response response = rwt.request(MediaType.APPLICATION_JSON).post(Entity.entity(n, MediaType.APPLICATION_JSON));
 				
 				ResteasyClient rc2 = new ResteasyClientBuilder().build();			
-				String path2 = "http://" + this.master + ":8080/ChatWAR/rest/agents/classes";
+				String path2 = "http://" + this.master + ":8080/ATProjWAR/rest/agents/classes";
 				System.out.println(path2);
 				ResteasyWebTarget rwt2 = rc2.target(path2);
 				Response response2 = rwt2.request(MediaType.APPLICATION_JSON).post(Entity.entity(Data.getAgentClasses(), MediaType.APPLICATION_JSON));
 				
 				ResteasyClient rc3 = new ResteasyClientBuilder().build();			
-				String path3 = "http://" + this.master + ":8080/ChatWAR/rest/nodes";
+				String path3 = "http://" + this.master + ":8080/ATProjWAR/rest/nodes";
 				System.out.println(path3);
 				ResteasyWebTarget rwt3 = rc3.target(path3);
 				Response response3 = rwt3.request(MediaType.APPLICATION_JSON).get();
@@ -166,7 +168,7 @@ public class AgentCenterBean {
 				}
 				
 				ResteasyClient rc4 = new ResteasyClientBuilder().build();			
-				String path4 = "http://" + this.master + ":8080/ChatWAR/rest/agents/classes";
+				String path4 = "http://" + this.master + ":8080/ATProjWAR/rest/agents/classes";
 				System.out.println(path4);
 				ResteasyWebTarget rwt4 = rc4.target(path4);
 				Response response4 = rwt4.request(MediaType.APPLICATION_JSON).get();
@@ -189,7 +191,7 @@ public class AgentCenterBean {
 				Response response5 = null;
 				while(cnt<2) {
 					ResteasyClient rc5 = new ResteasyClientBuilder().build();			
-					String path5 = "http://" + this.master + ":8080/ChatWAR/rest/agents/running";
+					String path5 = "http://" + this.master + ":8080/ATProjWAR/rest/agents/running";
 					System.out.println(path5);
 					ResteasyWebTarget rwt5 = rc5.target(path5);
 					response5 = rwt5.request(MediaType.APPLICATION_JSON).get();
@@ -208,7 +210,7 @@ public class AgentCenterBean {
 					}
 				} else {
 					ResteasyClient rc6 = new ResteasyClientBuilder().build();			
-					String path6 = "http://" + this.master + ":8080/ChatWAR/rest/node/" + n.getAlias();
+					String path6 = "http://" + this.master + ":8080/ATProjWAR/rest/node/" + n.getAlias();
 					System.out.println(path6);
 					ResteasyWebTarget rwt6 = rc6.target(path6);
 					Response response6 = rwt6.request(MediaType.APPLICATION_JSON).delete();
@@ -232,7 +234,7 @@ public class AgentCenterBean {
 		for(AgentCenter ac : Data.getAgentCenters()) {
 			if(!ac.getAddress().equals(this.hostip)) {
 				ResteasyClient rc = new ResteasyClientBuilder().build();			
-				String path = "http://" + ac.getAddress() + ":8080/ChatWAR/rest/node/" + alias;
+				String path = "http://" + ac.getAddress() + ":8080/ATProjWAR/rest/node/" + alias;
 				ResteasyWebTarget rwt = rc.target(path);
 				Response response = rwt.request(MediaType.APPLICATION_JSON).delete();
 				System.out.println(response);
@@ -244,7 +246,7 @@ public class AgentCenterBean {
 				for(AgentCenter ac : Data.getAgentCenters()) {
 					if(!ac.getAddress().equals(this.hostip)) {
 						ResteasyClient rc = new ResteasyClientBuilder().build();			
-						String path = "http://" + ac.getAddress() + ":8080/ChatWAR/rest/agents/running/" + a.getId().getName();
+						String path = "http://" + ac.getAddress() + ":8080/ATProjWAR/rest/agents/running/" + a.getId().getName();
 						ResteasyWebTarget rwt = rc.target(path);
 						Response response = rwt.request(MediaType.APPLICATION_JSON).delete();
 						System.out.println(response);
@@ -273,11 +275,11 @@ public class AgentCenterBean {
 			e.printStackTrace();
 		}
 		
-		String h = ip.toString().split("/")[1].split("\n")[0];
+		String h = Data.getMyAddress();
 		
 		if(this.master.equals(h)) {
 			/*ResteasyClient rc = new ResteasyClientBuilder().build();
-			String path = "http://" + ac.getAddress() + ":8080/ChatWAR/rest/agents/classes";
+			String path = "http://" + ac.getAddress() + ":8080/ATProjWAR/rest/agents/classes";
 			System.out.println(path);
 			ResteasyWebTarget rwt = rc.target(path);
 			Response response = rwt.request(MediaType.APPLICATION_JSON).get();
@@ -296,15 +298,15 @@ public class AgentCenterBean {
 				}
 			}*/
 			
-			for(AgentCenter ac2 : Data.getAgentCenters()) { 
+			/*for(AgentCenter ac2 : Data.getAgentCenters()) { 
 				if(!ac2.getAddress().equals(ac.getAddress())) {
 					ResteasyClient rc = new ResteasyClientBuilder().build();			
-					String path = "http://" + ac2.getAddress() + ":8080/ChatWAR/rest/node";
+					String path = "http://" + ac2.getAddress() + ":8080/ATProjWAR/rest/node";
 					System.out.println(path);
 					ResteasyWebTarget rwt = rc.target(path);
 					Response response = rwt.request(MediaType.APPLICATION_JSON).post(Entity.entity(ac, MediaType.APPLICATION_JSON));
 				}
-			}
+			}*/
 			
 			Data.getAgentCenters().add(ac);
 		} else {
@@ -335,7 +337,7 @@ public class AgentCenterBean {
 			e.printStackTrace();
 		}
 		
-		String h = ip.toString().split("/")[1].split("\n")[0];
+		String h = Data.getMyAddress();
 		
 		for(AgentCenter ac : list) {
 			boolean found = false;
@@ -371,13 +373,13 @@ public class AgentCenterBean {
 			e.printStackTrace();
 		}
 		
-		String h = ip.toString().split("/")[1].split("\n")[0];
+		String h = Data.getMyAddress();
 		
 		if(this.master.equals(h)) {
 			for(AgentCenter ac : Data.getAgentCenters()) {
 				if(!ac.getAddress().equals(h)) {
 					ResteasyClient rc = new ResteasyClientBuilder().build();			
-					String path = "http://" + ac.getAddress() + ":8080/ChatWAR/rest/node/"+alias;
+					String path = "http://" + ac.getAddress() + ":8080/ATProjWAR/rest/node/"+alias;
 					System.out.println(path);
 					ResteasyWebTarget rwt = rc.target(path);
 					Response response = rwt.request(MediaType.APPLICATION_JSON).delete();
@@ -397,7 +399,7 @@ public class AgentCenterBean {
 		for(AgentCenter h : Data.getAgentCenters()) {
 			if(!h.getAddress().equals(this.hostip)) {
 				ResteasyClient rc = new ResteasyClientBuilder().build();			
-				String path = "http://" + h.getAddress() + ":8080/ChatWAR/rest/node";
+				String path = "http://" + h.getAddress() + ":8080/ATProjWAR/rest/node";
 				System.out.println(path);
 				ResteasyWebTarget rwt = rc.target(path);
 				Response response = rwt.request(MediaType.APPLICATION_JSON).get();
@@ -410,7 +412,7 @@ public class AgentCenterBean {
 						for(AgentCenter h2 : Data.getAgentCenters()) {
 							if(!h2.getAddress().equals(h.getAddress()) && !h2.getAddress().equals(this.hostip)) {
 								ResteasyClient rc2 = new ResteasyClientBuilder().build();			
-								String path2 = "http://" + h2.getAddress() + ":8080/ChatWAR/rest/node/" + h.getAlias();
+								String path2 = "http://" + h2.getAddress() + ":8080/ATProjWAR/rest/node/" + h.getAlias();
 								ResteasyWebTarget rwt2 = rc2.target(path2);
 								Response response3 = rwt2.request(MediaType.APPLICATION_JSON).delete();
 								System.out.println(response3);
