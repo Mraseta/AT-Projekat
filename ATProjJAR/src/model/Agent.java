@@ -1,10 +1,12 @@
 package model;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 
 public class Agent implements AgentInterface, Serializable {
 	
 	private AID id;
+	protected ArrayList<FootballMatch> matches = new ArrayList<FootballMatch>();
 
 	public Agent(AID id) {
 		super();
@@ -21,6 +23,14 @@ public class Agent implements AgentInterface, Serializable {
 
 	public void setId(AID id) {
 		this.id = id;
+	}
+
+	public ArrayList<FootballMatch> getMatches() {
+		return matches;
+	}
+
+	public void setMatches(ArrayList<FootballMatch> matches) {
+		this.matches = matches;
 	}
 
 	@Override

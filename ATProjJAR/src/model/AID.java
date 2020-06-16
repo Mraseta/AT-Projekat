@@ -2,6 +2,9 @@ package model;
 
 import java.io.Serializable;
 
+import org.codehaus.jackson.annotate.JsonIgnoreProperties;
+
+@JsonIgnoreProperties
 public class AID implements Serializable {
 
 	private String name;

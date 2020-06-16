@@ -17,5 +17,7 @@
 	<classpathentry kind="lib" path="C:/Users/Marko/Documents/faks/agentske/neuroph/Framework/libs/logback-core-1.1.2.jar"/>
 	<classpathentry kind="lib" path="C:/Users/Marko/Documents/faks/agentske/neuroph/Framework/libs/slf4j-api-1.7.5.jar"/>
 	<classpathentry kind="lib" path="C:/Users/Marko/Documents/faks/agentske/neuroph/Framework/neuroph-core-2.98.jar"/>
+	<classpathentry kind="lib" path="/ATProjEAR/EarContent/lib/jackson-core-asl-1.9.13.jar"/>
+	<classpathentry kind="lib" path="/ATProjEAR/EarContent/lib/jackson-mapper-asl-1.9.13.jar"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>

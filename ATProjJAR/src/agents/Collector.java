@@ -21,13 +21,12 @@ import data.Data;
 import model.ACLMessage;
 import model.AID;
 import model.Agent;
+import model.AgentCenter;
 import model.FootballMatch;
 import model.Performative;
 
 @Stateful
 public class Collector extends Agent {
-	
-	private ArrayList<FootballMatch> matches = new ArrayList<FootballMatch>();
 	
 	@SuppressWarnings("resource")
 	@Override
@@ -84,30 +83,34 @@ public class Collector extends Agent {
 				
 				
 				for(Agent a : Data.getAgents()) {
+					System.out.println(a);
 					if(!a.getId().getHost().getAddress().equals(h) && a.getId().getType().getName().equals("collector")) {
+						System.out.println("usao da salje poruku agentu na drugom serveru");
 						req.setReceivers(new AID[] {a.getId()});
 						ResteasyClient rc = new ResteasyClientBuilder().build();			
-						String path = "http://" + a.getId().getHost().getAddress() + ":8080/ChatWAR/rest/messages";
+						String path = "http://" + a.getId().getHost().getAddress() + ":8080/ATProjWAR/rest/messages";
 						System.out.println(path);
 						ResteasyWebTarget rwt = rc.target(path);
 						Response response = rwt.request(MediaType.APPLICATION_JSON).post(Entity.entity(req, MediaType.APPLICATION_JSON));
 					}
 				}
 				
-				String cont = "";
-				for(FootballMatch fm : matches) {
-					cont = cont + fm + "\n";
-				}
-				
-				ACLMessage mess = new ACLMessage();
-				mess.setContent(cont);
-				mess.setPerformative(Performative.PREDICT);
-				this.matches = new ArrayList<FootballMatch>();
-				
-				for(Agent a : Data.getAgents()) {
-					if(a.getId().getHost().getAddress().equals(h) && a.getId().getType().getName().equals("predictor")) {
-						a.handleMessage(mess);
-						break;
+				if(Data.getAgentCenters().size() == 1) {
+					String cont = "";
+					for(FootballMatch fm : matches) {
+						cont = cont + fm + "\n";
+					}
+					
+					ACLMessage mess = new ACLMessage();
+					mess.setContent(cont);
+					mess.setPerformative(Performative.PREDICT);
+					this.matches = new ArrayList<FootballMatch>();
+					
+					for(Agent a : Data.getAgents()) {
+						if(a.getId().getHost().getAddress().equals(h) && a.getId().getType().getName().equals("predictor")) {
+							a.handleMessage(mess);
+							break;
+						}
 					}
 				}
 			} catch (IOException e) {
@@ -148,7 +151,7 @@ public class Collector extends Agent {
 				res.setReceivers(new AID[] {message.getReplyTo()});
 				
 				ResteasyClient rc = new ResteasyClientBuilder().build();			
-				String path = "http://" + message.getReplyTo().getHost().getAddress() + ":8080/ChatWAR/rest/messages";
+				String path = "http://" + message.getReplyTo().getHost().getAddress() + ":8080/ATProjWAR/rest/messages";
 				System.out.println(path);
 				ResteasyWebTarget rwt = rc.target(path);
 				Response response = rwt.request(MediaType.APPLICATION_JSON).post(Entity.entity(res, MediaType.APPLICATION_JSON));
@@ -192,21 +195,29 @@ public class Collector extends Agent {
 			}
 			
 			String h = Data.getMyAddress();
+			boolean found = false;
 			
 			for(Agent a : Data.getAgents()) {
 				if(a.getId().getHost().getAddress().equals(h) && a.getId().getType().getName().equals("predictor")) {
 					a.handleMessage(mess);
+					found = true;
 					break;
 				}
 			}
+			
+			if(!found) {
+				for(Agent a : Data.getAgents()) {
+					if(a.getId().getType().getName().equals("predictor")) {
+						mess.setReceivers(new AID[] {a.getId()});
+						ResteasyClient rc = new ResteasyClientBuilder().build();			
+						String path = "http://" + a.getId().getHost().getAddress() + ":8080/ATProjWAR/rest/messages";
+						System.out.println(path);
+						ResteasyWebTarget rwt = rc.target(path);
+						Response response7 = rwt.request(MediaType.APPLICATION_JSON).post(Entity.entity(mess, MediaType.APPLICATION_JSON));
+						break;
+					}
+				}
+			}
 		}
-	}
-
-	public ArrayList<FootballMatch> getMatches() {
-		return matches;
-	}
-
-	public void setMatches(ArrayList<FootballMatch> matches) {
-		this.matches = matches;
 	}
 }

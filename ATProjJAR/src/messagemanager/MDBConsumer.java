@@ -67,7 +67,7 @@ public class MDBConsumer implements MessageListener {
 				if(agnt.getId().getHost().getAddress().equals(h)) {
 					ACLMessage aclm = new ACLMessage(acl, i);
 					String s = aclm.toString();
-					ws.echoTextMessage(s);
+					//ws.echoTextMessage(s);
 					agnt.handleMessage(acl);
 				} else {
 					ACLMessage aclm = new ACLMessage(acl, i);

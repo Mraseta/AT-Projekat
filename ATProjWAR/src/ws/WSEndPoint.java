@@ -18,6 +18,8 @@ import javax.websocket.server.ServerEndpoint;
 @ServerEndpoint("/ws")
 @LocalBean
 public class WSEndPoint {
+	public static String LOOKUP = "java:app/ATProjWAR/WSEndPoint!ws.WSEndPoint";
+	
 	static List<Session> sessions = new ArrayList<Session>();
 	
 	//@EJB

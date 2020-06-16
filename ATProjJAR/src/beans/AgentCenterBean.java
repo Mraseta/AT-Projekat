@@ -215,6 +215,12 @@ public class AgentCenterBean {
 					ResteasyWebTarget rwt6 = rc6.target(path6);
 					Response response6 = rwt6.request(MediaType.APPLICATION_JSON).delete();
 				}
+				
+				ResteasyClient rc7 = new ResteasyClientBuilder().build();			
+				String path7 = "http://" + this.master + ":8080/ATProjWAR/rest/agents/running";
+				System.out.println(path7);
+				ResteasyWebTarget rwt7 = rc7.target(path7);
+				Response response7 = rwt7.request(MediaType.APPLICATION_JSON).post(Entity.entity(Data.getAgents(), MediaType.APPLICATION_JSON));
 			}
 			
 		} catch (Exception e) {

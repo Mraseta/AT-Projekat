@@ -5,9 +5,17 @@ import java.net.UnknownHostException;
 import java.util.ArrayList;
 
 import javax.ejb.Stateful;
+import javax.ws.rs.client.Entity;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+
+import org.jboss.resteasy.client.jaxrs.ResteasyClient;
+import org.jboss.resteasy.client.jaxrs.ResteasyClientBuilder;
+import org.jboss.resteasy.client.jaxrs.ResteasyWebTarget;
 
 import data.Data;
 import model.ACLMessage;
+import model.AID;
 import model.Agent;
 import model.FootballMatch;
 import model.Performative;
@@ -79,11 +87,27 @@ public class Predictor extends Agent {
 			}
 			
 			String h = Data.getMyAddress();
+			boolean found = false;
 			
 			for(Agent a : Data.getAgents()) {
 				if(a.getId().getHost().getAddress().equals(h) && a.getId().getType().getName().equals("master")) {
 					a.handleMessage(mess);
+					found = true;
 					break;
+				}
+			}
+			
+			if(!found) {
+				for(Agent a : Data.getAgents()) {
+					if(a.getId().getType().getName().equals("master")) {
+						mess.setReceivers(new AID[] {a.getId()});
+						ResteasyClient rc = new ResteasyClientBuilder().build();			
+						String path = "http://" + a.getId().getHost().getAddress() + ":8080/ATProjWAR/rest/messages";
+						System.out.println(path);
+						ResteasyWebTarget rwt = rc.target(path);
+						Response response7 = rwt.request(MediaType.APPLICATION_JSON).post(Entity.entity(mess, MediaType.APPLICATION_JSON));
+						break;
+					}
 				}
 			}
 		}
