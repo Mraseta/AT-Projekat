@@ -232,13 +232,15 @@ public class AgentCenterBean {
 	private void destroy() {
 		String alias = "";
 		for(AgentCenter ac : Data.getAgentCenters()) {
-			if(ac.getAddress().equals(this.hostip)) {
+			if(ac.getAddress().equals(Data.getMyAddress())) {
 				alias = ac.getAlias();
 			}
 		}
 		
+		System.out.println("alias   " + alias);
+		
 		for(AgentCenter ac : Data.getAgentCenters()) {
-			if(!ac.getAddress().equals(this.hostip)) {
+			if(!ac.getAddress().equals(Data.getMyAddress())) {
 				ResteasyClient rc = new ResteasyClientBuilder().build();			
 				String path = "http://" + ac.getAddress() + ":8080/ATProjWAR/rest/node/" + alias;
 				ResteasyWebTarget rwt = rc.target(path);
@@ -248,9 +250,10 @@ public class AgentCenterBean {
 		}
 		
 		for(Agent a : Data.getAgents()) {
-			if(a.getId().getHost().getAddress().equals(this.hostip)) {
+			if(a.getId().getHost().getAddress().equals(Data.getMyAddress())) {
 				for(AgentCenter ac : Data.getAgentCenters()) {
-					if(!ac.getAddress().equals(this.hostip)) {
+					if(!ac.getAddress().equals(Data.getMyAddress())) {
+						System.out.println("brisem agenta");
 						ResteasyClient rc = new ResteasyClientBuilder().build();			
 						String path = "http://" + ac.getAddress() + ":8080/ATProjWAR/rest/agents/running/" + a.getId().getName();
 						ResteasyWebTarget rwt = rc.target(path);
@@ -364,10 +367,20 @@ public class AgentCenterBean {
 	
 	@DELETE
 	@Path("/node/{alias}")
+	@Consumes(MediaType.APPLICATION_JSON)
 	public Response deleteNode(@PathParam("alias") String alias) {
-		for(int i=0;i<Data.getAgentCenters().size();i++) {
+		System.out.println("USAO U DELETE");
+		/*for(int i=0;i<Data.getAgentCenters().size();i++) {
 			if(Data.getAgentCenters().get(i).getAlias().equals(alias)) {
+				System.out.println("brisem " + Data.getAgentCenters().get(i));
 				Data.getAgentCenters().remove(i);
+			}
+		}*/
+		
+		for(AgentCenter ac : Data.getAgentCenters()) {
+			if(ac.getAlias().equals(alias)) {
+				System.out.println("brisem  " + ac);
+				Data.getAgentCenters().remove(ac);
 			}
 		}
 		
@@ -381,7 +394,7 @@ public class AgentCenterBean {
 		
 		String h = Data.getMyAddress();
 		
-		if(this.master.equals(h)) {
+		/*if(this.master.equals(h)) {
 			for(AgentCenter ac : Data.getAgentCenters()) {
 				if(!ac.getAddress().equals(h)) {
 					ResteasyClient rc = new ResteasyClientBuilder().build();			
@@ -391,7 +404,7 @@ public class AgentCenterBean {
 					Response response = rwt.request(MediaType.APPLICATION_JSON).delete();
 				}
 			}
-		}
+		}*/
 		
 		return Response.status(200).build();
 	}
@@ -403,7 +416,7 @@ public class AgentCenterBean {
 		System.out.println("entered heartbeat " + Data.getAgentCenters().size());
 		
 		for(AgentCenter h : Data.getAgentCenters()) {
-			if(!h.getAddress().equals(this.hostip)) {
+			if(!h.getAddress().equals(Data.getMyAddress())) {
 				ResteasyClient rc = new ResteasyClientBuilder().build();			
 				String path = "http://" + h.getAddress() + ":8080/ATProjWAR/rest/node";
 				System.out.println(path);
@@ -416,7 +429,7 @@ public class AgentCenterBean {
 					if(response2.getStatus() != 200) {
 						Data.getAgentCenters().remove(h);
 						for(AgentCenter h2 : Data.getAgentCenters()) {
-							if(!h2.getAddress().equals(h.getAddress()) && !h2.getAddress().equals(this.hostip)) {
+							if(!h2.getAddress().equals(h.getAddress()) && !h2.getAddress().equals(Data.getMyAddress())) {
 								ResteasyClient rc2 = new ResteasyClientBuilder().build();			
 								String path2 = "http://" + h2.getAddress() + ":8080/ATProjWAR/rest/node/" + h.getAlias();
 								ResteasyWebTarget rwt2 = rc2.target(path2);
