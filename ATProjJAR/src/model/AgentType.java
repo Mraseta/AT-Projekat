@@ -1,6 +1,8 @@
 package model;
 
-public class AgentType {
+import java.io.Serializable;
+
+public class AgentType implements Serializable {
 
 	private String name;
 	private String module;
@@ -9,6 +11,10 @@ public class AgentType {
 		super();
 		this.name = name;
 		this.module = module;
+	}
+	
+	public AgentType() {
+		
 	}
 	
 	public String getName() {

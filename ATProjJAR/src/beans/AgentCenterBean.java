@@ -2,21 +2,26 @@ package beans;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
+import java.io.Writer;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
-import javax.ejb.LocalBean;
 import javax.ejb.Schedule;
 import javax.ejb.Schedules;
 import javax.ejb.Singleton;
 import javax.ejb.Startup;
-import javax.ejb.Stateless;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -52,6 +57,43 @@ public class AgentCenterBean {
 		BufferedWriter writer = null;
 		
 		try {
+			/*Random rnd = new Random();
+			String[] timovi = new String[] {"FC BARCELONA", "REAL MADRID", "SEVILLA FC", "REAL SOCIEDAD", "GETAFE CF", "ATLETICO DE MADRID", "VALENCIA CF", "GRANADA CF", "VILLAREAL CF", "ATHLETIC CLUB", "C.A. OSASUNA", "LEVANTE UD", "REAL BETIS", "REAL VALLADOLID CF", "D. ALAVES", "SD EIBAR", "RC CELTA", "RCD MALLORCA", "CD LEGANES", "RCD ESPANYOL"};
+			PrintWriter writerr = new PrintWriter("utakmice.txt", "UTF-8");
+			
+			Writer writer1 = new BufferedWriter(new OutputStreamWriter(new FileOutputStream("utakmice.txt"), "utf-8"));
+			
+			//File file = new File("utakmice.txt");
+			
+			String upis = "";
+			int br = 0;
+			
+			while(br<20) {
+				for(String tim1 : timovi) {
+					for(String tim2 : timovi) {
+						if(!tim1.equals(tim2)) {
+							System.out.println(tim1 + " " + tim2 + " " + rnd.nextInt(5) + " " + rnd.nextInt(5));
+							//writer1.write(tim1 + " " + tim2 + " " + rnd.nextInt(5) + " " + rnd.nextInt(5) + "\n");
+							upis = upis + tim1 + "-" + tim2 + "-" + rnd.nextInt(5) + "-" + rnd.nextInt(5) + "\n";
+						}
+					}
+				}
+				br++;
+			}
+			
+			FileWriter fw = new FileWriter(file.getAbsoluteFile());
+	        BufferedWriter bw = new BufferedWriter(fw);
+	        bw.write(upis);
+	        bw.close();
+			
+			writer1.write(upis.substring(0, upis.length()-1));
+			
+			writer1.close();
+			
+			writerr.close();
+			
+			System.out.println("\n\n\n\n gotovo \n\n\n\n");*/
+			
 			InputStream in = getClass().getClassLoader().getResourceAsStream("master.txt");
 			reader = new BufferedReader(new InputStreamReader(in));
 			String fileContent = reader.readLine();
@@ -80,6 +122,15 @@ public class AgentCenterBean {
 					System.out.println(ag);
 				}
 			} else {
+				for(Agent ag : Data.getAgents()) {
+					System.out.println(ag);
+					if(ag.getId().getHost().getAddress().equals("temp")) {
+						ag.getId().setHost(n);
+					}
+					
+					System.out.println(ag);
+				}
+				
 				this.master = fileContent.split("=")[1];
 				Data.getAgentCenters().add(new AgentCenter(this.master, this.master));
 				ResteasyClient rc = new ResteasyClientBuilder().build();			

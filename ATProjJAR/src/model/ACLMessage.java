@@ -1,9 +1,13 @@
 package model;
 
+import java.io.Serializable;
+import java.util.Arrays;
 import java.util.HashMap;
 
-public class ACLMessage {
+@SuppressWarnings("serial")
+public class ACLMessage implements Serializable {
 
+	private Performative performative;
 	private AID sender;
 	private AID[] receivers;
 	private AID replyTo;
@@ -37,6 +41,46 @@ public class ACLMessage {
 		this.replyWith = replyWith;
 		this.inReplyTo = inReplyTo;
 		this.replyBy = replyBy;
+	}
+	
+	public ACLMessage(Performative performative, AID sender, AID[] receivers, AID replyTo, String content,
+			Object contentObj, HashMap<String, Object> userArgs, String language, String encoding, String ontology,
+			String protocol, String conversationId, String replyWith, String inReplyTo, Long replyBy) {
+		super();
+		this.performative = performative;
+		this.sender = sender;
+		this.receivers = receivers;
+		this.replyTo = replyTo;
+		this.content = content;
+		ContentObj = contentObj;
+		this.userArgs = userArgs;
+		this.language = language;
+		this.encoding = encoding;
+		this.ontology = ontology;
+		this.protocol = protocol;
+		this.conversationId = conversationId;
+		this.replyWith = replyWith;
+		this.inReplyTo = inReplyTo;
+		this.replyBy = replyBy;
+	}
+
+
+	public ACLMessage(ACLMessage mess, int i) {
+		this.performative = mess.getPerformative();
+		this.sender = mess.getSender();
+		this.receivers = new AID[] {mess.getReceivers()[i]};
+		this.replyTo = mess.getReplyTo();
+		this.content = mess.getContent();
+		ContentObj = mess.getContentObj();
+		this.userArgs = mess.getUserArgs();
+		this.language = mess.getLanguage();
+		this.encoding = mess.getEncoding();
+		this.ontology = mess.getOntology();
+		this.protocol = mess.getProtocol();
+		this.conversationId = mess.getConversationId();
+		this.replyWith = mess.getReplyWith();
+		this.inReplyTo = mess.getInReplyTo();
+		this.replyBy = mess.getReplyBy();
 	}
 	
 	public ACLMessage() {
@@ -153,5 +197,22 @@ public class ACLMessage {
 	
 	public void setReplyBy(Long replyBy) {
 		this.replyBy = replyBy;
+	}
+
+	public Performative getPerformative() {
+		return performative;
+	}
+
+	public void setPerformative(Performative performative) {
+		this.performative = performative;
+	}
+
+	@Override
+	public String toString() {
+		return "ACLMessage [sender=" + sender + ", receivers=" + Arrays.toString(receivers) + ", replyTo=" + replyTo
+				+ ", content=" + content + ", ContentObj=" + ContentObj + ", userArgs=" + userArgs + ", language="
+				+ language + ", encoding=" + encoding + ", ontology=" + ontology + ", protocol=" + protocol
+				+ ", conversationId=" + conversationId + ", replyWith=" + replyWith + ", inReplyTo=" + inReplyTo
+				+ ", replyBy=" + replyBy + "]";
 	}
 }

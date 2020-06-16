@@ -1,6 +1,8 @@
 package model;
 
-public class Agent implements AgentInterface {
+import java.io.Serializable;
+
+public class Agent implements AgentInterface, Serializable {
 	
 	private AID id;
 

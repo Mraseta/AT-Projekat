@@ -22,8 +22,8 @@ public class Data {
 	private static ArrayList<ACLMessage> messages = new ArrayList<>();
 	
 	static {		
-		AgentType at1 = new AgentType("sakupljac", "sakupljac");
-		AgentType at2 = new AgentType("predikcija", "predikcija");
+		AgentType at1 = new AgentType("collector", "collector");
+		AgentType at2 = new AgentType("predictor", "predictor");
 		AgentType at3 = new AgentType("master", "master");
 		
 		agentClasses.add(at1);

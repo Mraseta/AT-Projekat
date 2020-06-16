@@ -1,6 +1,8 @@
 package model;
 
-public class AID {
+import java.io.Serializable;
+
+public class AID implements Serializable {
 
 	private String name;
 	private AgentCenter host;
@@ -11,6 +13,10 @@ public class AID {
 		this.name = name;
 		this.host = host;
 		this.type = type;
+	}
+	
+	public AID() {
+		
 	}
 	
 	public String getName() {
