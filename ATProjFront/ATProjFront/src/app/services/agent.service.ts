@@ -64,7 +64,7 @@ export class AgentService {
       .pipe(
         map((res: any) => {
           const data = res;
-          localStorage.setItem('loggedUser', JSON.stringify(data));
+          //localStorage.setItem('loggedUser', JSON.stringify(data));
           return data;
         }),
         catchError((err: any) => {
@@ -80,7 +80,23 @@ export class AgentService {
       .pipe(
         map((res: any) => {
           const data = res;
-          localStorage.setItem('loggedUser', JSON.stringify(data));
+          //localStorage.setItem('loggedUser', JSON.stringify(data));
+          return data;
+        }),
+        catchError((err: any) => {
+          console.log(err)
+          return throwError(err)
+        })
+      )
+  }
+
+  deleteAgent(name: string, address: string) {
+    return this.http.delete("http://" + address + ":8080/ATProjWAR/rest/agents/running/" + name, {
+    })
+      .pipe(
+        map((res: any) => {
+          const data = res;
+          //localStorage.setItem('loggedUser', JSON.stringify(data));
           return data;
         }),
         catchError((err: any) => {

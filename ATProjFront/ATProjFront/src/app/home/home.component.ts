@@ -138,4 +138,13 @@ export class HomeComponent implements OnInit {
         }, (error) => alert(error.text)
       );
   }
+
+  deleteAgent(name: any) {
+    this.agentService.deleteAgent(name, this.address)
+      .subscribe(
+        (data: any) => {
+          console.log(data);
+        }, (error) => alert(error.text)
+      );
+  }
 }

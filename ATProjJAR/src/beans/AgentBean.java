@@ -138,6 +138,29 @@ public class AgentBean {
 			a = new Collector();
 		}
 		
+		boolean found = false;
+		for(AgentType at : Data.getAgentClasses()) {
+			if(at.getName().equals(type)) {
+				found = true;
+			}
+		}
+		
+		String h = Data.getMyAddress();
+		
+		if(!found) {
+			Data.getAgentClasses().add(new AgentType(type, type));
+			for(AgentCenter aa : Data.getAgentCenters()) {
+				if(!h.equals(aa.getAddress())) {
+					ResteasyClient rc = new ResteasyClientBuilder().build();			
+					String path = "http://" + aa.getAddress() + ":8080/ATProjWAR/rest/agents/classes";
+					System.out.println(path);
+					ResteasyWebTarget rwt = rc.target(path);
+					Response response = rwt.request(MediaType.APPLICATION_JSON).post(Entity.entity(Data.getAgentClasses(), MediaType.APPLICATION_JSON));
+				}
+			}
+			ws.echoTextMessage("refresh types");
+		}
+		
 		InetAddress ip = null;
 		try {
 			ip = InetAddress.getLocalHost();
@@ -146,7 +169,7 @@ public class AgentBean {
 			e.printStackTrace();
 		}
 		
-		String h = Data.getMyAddress();
+		
 		
 		AgentCenter ac = new AgentCenter();
 		
@@ -179,10 +202,10 @@ public class AgentBean {
 		for(int i=0;i<Data.getAgents().size();i++) {
 			if(Data.getAgents().get(i).getId().getName().equals(aid)) {
 				Data.getAgents().remove(i);
-				return Response.status(200).build();
+				break;
 			}
 		}
 		ws.echoTextMessage("refresh agents");
-		return Response.status(400).build();
+		return Response.status(200).build();
 	}
 }

@@ -91,6 +91,7 @@ public class Predictor extends Agent {
 			
 			for(Agent a : Data.getAgents()) {
 				if(message.getReplyTo().getName().equals("temp") && a.getId().getHost().getAddress().equals(h) && a.getId().getType().getName().equals("master")) {
+					System.out.println("usao temp");
 					a.handleMessage(mess);
 					found = true;
 					break;
@@ -98,6 +99,7 @@ public class Predictor extends Agent {
 			}
 			
 			if(!message.getReplyTo().getName().equals("temp")) {
+				System.out.println("usao gde ne treba");
 				for(Agent a : Data.getAgents()) {
 					if(a.getId().getType().getName().equals("master") && a.getId().getHost().getAddress().equals(message.getReplyTo().getHost().getAddress())) {
 						mess.setReceivers(new AID[] {a.getId()});
