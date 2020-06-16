@@ -421,10 +421,28 @@ public class AgentCenterBean {
 				String path = "http://" + h.getAddress() + ":8080/ATProjWAR/rest/node";
 				System.out.println(path);
 				ResteasyWebTarget rwt = rc.target(path);
-				Response response = rwt.request(MediaType.APPLICATION_JSON).get();
-				System.out.println(response);
+				try {
+					Response response = rwt.request(MediaType.APPLICATION_JSON).get();
+					System.out.println(response);
+				} catch(Exception e1) {
+					try {
+						Response response = rwt.request(MediaType.APPLICATION_JSON).get();
+					} catch(Exception e2) {
+						Data.getAgentCenters().remove(h);
+						System.out.println("obrisao");
+						for(AgentCenter h2 : Data.getAgentCenters()) {
+							if(!h2.getAddress().equals(h.getAddress()) && !h2.getAddress().equals(Data.getMyAddress())) {
+								ResteasyClient rc2 = new ResteasyClientBuilder().build();			
+								String path2 = "http://" + h2.getAddress() + ":8080/ATProjWAR/rest/node/" + h.getAlias();
+								ResteasyWebTarget rwt2 = rc2.target(path2);
+								Response response3 = rwt2.request(MediaType.APPLICATION_JSON).delete();
+								System.out.println(response3);
+							}
+						}
+					}
+				}
 				
-				if(response.getStatus() != 200) {
+				/*if(response.getStatus() != 200) {
 					Response response2 = rwt.request(MediaType.APPLICATION_JSON).get();
 					if(response2.getStatus() != 200) {
 						Data.getAgentCenters().remove(h);
@@ -438,7 +456,7 @@ public class AgentCenterBean {
 							}
 						}
 					}
-				}
+				}*/
 			}
 		}
 		
