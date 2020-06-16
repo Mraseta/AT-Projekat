@@ -104,6 +104,7 @@ public class Collector extends Agent {
 					ACLMessage mess = new ACLMessage();
 					mess.setContent(cont);
 					mess.setPerformative(Performative.PREDICT);
+					mess.setReplyTo(new AID("temp",null,null));
 					this.matches = new ArrayList<FootballMatch>();
 					
 					for(Agent a : Data.getAgents()) {
@@ -183,6 +184,7 @@ public class Collector extends Agent {
 			
 			ACLMessage mess = new ACLMessage();
 			mess.setContent(cont);
+			mess.setReplyTo(new AID("temp",null,null));
 			mess.setPerformative(Performative.PREDICT);
 			this.matches = new ArrayList<FootballMatch>();
 			
@@ -209,6 +211,7 @@ public class Collector extends Agent {
 				for(Agent a : Data.getAgents()) {
 					if(a.getId().getType().getName().equals("predictor")) {
 						mess.setReceivers(new AID[] {a.getId()});
+						mess.setReplyTo(getId());
 						ResteasyClient rc = new ResteasyClientBuilder().build();			
 						String path = "http://" + a.getId().getHost().getAddress() + ":8080/ATProjWAR/rest/messages";
 						System.out.println(path);
@@ -219,5 +222,7 @@ public class Collector extends Agent {
 				}
 			}
 		}
+		
+		
 	}
 }

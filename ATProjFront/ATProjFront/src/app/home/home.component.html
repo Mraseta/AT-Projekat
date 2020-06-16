@@ -1,9 +1,37 @@
-<div *ngIf="agentsLoaded">
-    <div *ngFor="let agent of agents">
-        {{agent.id.name}}
-        {{agent.id.type.name}}
-    </div>
-</div>
+<table class="table">
+    <tr>
+        <td>Type:</td>
+        <td><input type="text" [(ngModel)] = "inputType"></td>
+    </tr>
+    <tr>
+        <td>Name:</td>
+        <td><input type="text" [(ngModel)] = "inputName"></td>
+    </tr>
+    <tr>
+        <td></td>
+        <td><button (click)="newAgent()">Create</button></td>
+    </tr>
+</table>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">Name</th>
+            <th scope="col">Type</th>
+        </tr>
+    </thead>
+    <tbody>
+        <ng-container *ngFor="let agent of agents; let i = index">
+            <tr>
+                <th scope="row">{{i+1}}</th>
+                <td>{{agent.id.name}}</td>
+                <td>{{agent.id.type.name}}</td>
+            </tr>
+        </ng-container>
+    </tbody>
+</table>
+
 
 <div *ngIf="typesLoaded">
     <div *ngFor="let type of agentTypes">
@@ -11,11 +39,25 @@
     </div>
 </div>
 
-<div *ngIf="messagesLoaded">
-    <div *ngFor="let mess of messages">
-        {{mess.content}}
-    </div>
-</div>
+<table class="table">
+    <thead>
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">Performative</th>
+            <th scope="col">Content</th>
+        </tr>
+    </thead>
+    <tbody>
+        <ng-container *ngFor="let mess of messages; let i = index">
+            <tr>
+                <th scope="row">{{i+1}}</th>
+                <td>{{mess.performative}}</td>
+                <td>{{mess.content}}</td>
+            </tr>
+        </ng-container>
+    </tbody>
+</table>
+
 
 <select [(ngModel)]="selected1">
     <option *ngFor="let team of teams" [value]="team">{{team}}</option>

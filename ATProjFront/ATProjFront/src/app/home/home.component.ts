@@ -20,6 +20,8 @@ export class HomeComponent implements OnInit {
   teams = ["FC BARCELONA", "REAL MADRID", "SEVILLA FC", "REAL SOCIEDAD", "GETAFE CF", "ATLETICO DE MADRID", "VALENCIA CF", "GRANADA CF", "VILLAREAL CF", "ATHLETIC CLUB", "C.A. OSASUNA", "LEVANTE UD", "REAL BETIS", "REAL VALLADOLID CF", "D. ALAVES", "SD EIBAR", "RC CELTA", "RCD MALLORCA", "CD LEGANES", "RCD ESPANYOL"];
   selected1 = null;
   selected2 = null;
+  inputType = "";
+  inputName = "";
 
   constructor(private router: Router,
     private agentService: AgentService) { }
@@ -32,6 +34,8 @@ export class HomeComponent implements OnInit {
     this.host = "ws://" + this.address + ":8080/ATProjWAR/ws";
 
     this.getAgents();
+    this.getAgentTypes();
+    this.getMessages();
 
     try {
       this.socket = new WebSocket(this.host);
@@ -46,6 +50,7 @@ export class HomeComponent implements OnInit {
 
       this.socket.onmessage = function (msg) {
         console.log('onmessage: Received: ' + msg.data);
+
         if(msg.data.includes('predicted') || msg.data.includes('Draw')) {
           alert(msg.data);
         }
@@ -111,7 +116,7 @@ export class HomeComponent implements OnInit {
   aaa() {
     let agent = null;
     for(let a of this.agents) {
-      if(a.id.type.name === 'collector') {
+      if(a.id.type.name === 'collector' && a.id.host.address === this.address){
         agent = a;
         break;
       }
@@ -125,4 +130,12 @@ export class HomeComponent implements OnInit {
       );
   }
 
+  newAgent() {
+    this.agentService.newAgent(this.inputType, this.inputName, this.address)
+      .subscribe(
+        (data: any) => {
+          console.log(data);
+        }, (error) => alert(error.text)
+      );
+  }
 }

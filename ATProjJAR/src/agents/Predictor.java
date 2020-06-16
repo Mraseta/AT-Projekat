@@ -90,16 +90,16 @@ public class Predictor extends Agent {
 			boolean found = false;
 			
 			for(Agent a : Data.getAgents()) {
-				if(a.getId().getHost().getAddress().equals(h) && a.getId().getType().getName().equals("master")) {
+				if(message.getReplyTo().getName().equals("temp") && a.getId().getHost().getAddress().equals(h) && a.getId().getType().getName().equals("master")) {
 					a.handleMessage(mess);
 					found = true;
 					break;
 				}
 			}
 			
-			if(!found) {
+			if(!message.getReplyTo().getName().equals("temp")) {
 				for(Agent a : Data.getAgents()) {
-					if(a.getId().getType().getName().equals("master")) {
+					if(a.getId().getType().getName().equals("master") && a.getId().getHost().getAddress().equals(message.getReplyTo().getHost().getAddress())) {
 						mess.setReceivers(new AID[] {a.getId()});
 						ResteasyClient rc = new ResteasyClientBuilder().build();			
 						String path = "http://" + a.getId().getHost().getAddress() + ":8080/ATProjWAR/rest/messages";

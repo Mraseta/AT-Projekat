@@ -27,6 +27,9 @@ import org.jboss.resteasy.client.jaxrs.ResteasyClient;
 import org.jboss.resteasy.client.jaxrs.ResteasyClientBuilder;
 import org.jboss.resteasy.client.jaxrs.ResteasyWebTarget;
 
+import agents.Collector;
+import agents.MasterAgent;
+import agents.Predictor;
 import data.Data;
 import model.AID;
 import model.Agent;
@@ -126,6 +129,14 @@ public class AgentBean {
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response newAgent(@PathParam("type") String type, @PathParam("name") String name) {
 		Agent a = new Agent();
+		
+		if(type.equals("master")) {
+			a = new MasterAgent();
+		} else if(type.equals("predictor")) {
+			a = new Predictor();
+		} else {
+			a = new Collector();
+		}
 		
 		InetAddress ip = null;
 		try {

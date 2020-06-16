@@ -39,7 +39,7 @@ export class AgentService {
   }
 
   getMessages(address: string) {
-    return this.http.get("http://" + address + ":8080/ATProjWAR/rest/messages")
+    return this.http.get("http://" + address + ":8080/ATProjWAR/rest/messages/all")
       .pipe(
         map((res: any) => {
           const data = res;
@@ -60,6 +60,22 @@ export class AgentService {
       "performative": 23,
       "content": team1+'-'+team2,
       "receivers": receivers
+    })
+      .pipe(
+        map((res: any) => {
+          const data = res;
+          localStorage.setItem('loggedUser', JSON.stringify(data));
+          return data;
+        }),
+        catchError((err: any) => {
+          console.log(err)
+          return throwError(err)
+        })
+      )
+  }
+
+  newAgent(type: string, name: string, address: string) {
+    return this.http.put("http://" + address + ":8080/ATProjWAR/rest/agents/running/" + type + "/" + name, {
     })
       .pipe(
         map((res: any) => {

@@ -104,4 +104,11 @@ public class MessageBean {
 		}
 		return ret;
 	}
+	
+	@GET
+	@Path("/all")
+	@Produces(MediaType.APPLICATION_JSON)
+	public ArrayList<ACLMessage> getAllMessages() {
+		return Data.getMessages();
+	}
 }
